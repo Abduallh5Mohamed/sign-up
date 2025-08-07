@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../Services/auth.service';
 
@@ -25,15 +25,31 @@ export class SignUpComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
-    });
+      displayName: ['', Validators.required],
+      acceptTerms: [false, Validators.requiredTrue]
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+    
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
   }
 
   getFieldError(fieldName: string): string {
     const field = this.signUpForm.get(fieldName);
     if (field && field.invalid && (field.dirty || field.touched)) {
       if (field.errors?.['required']) {
+        if (fieldName === 'displayName') {
+          return 'Display name is required';
+        }
+        if (fieldName === 'acceptTerms') {
+          return 'You must accept the terms and conditions';
+        }
         return `${fieldName} is required`;
       }
       if (field.errors?.['email']) {
@@ -42,7 +58,16 @@ export class SignUpComponent {
       if (field.errors?.['minlength']) {
         return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
       }
+      if (field.errors?.['requiredTrue']) {
+        return 'You must accept the terms and conditions';
+      }
     }
+    
+    // Check for password mismatch error at form level
+    if (fieldName === 'confirmPassword' && this.signUpForm.errors?.['passwordMismatch']) {
+      return 'Passwords do not match';
+    }
+    
     return '';
   }
 
@@ -56,15 +81,19 @@ export class SignUpComponent {
 
   onSubmit() {
     if (this.signUpForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = '';
+      
       const formData = this.signUpForm.value;
       
-      if (formData.password !== formData.confirmPassword) {
-        console.error('Passwords do not match');
-        return;
-      }
-
-      // Handle sign up logic here
-      console.log('Sign up form submitted:', formData);
+      this.authService.signUp(formData.email, formData.password, formData.displayName)
+        .then(() => {
+          this.router.navigate(['/auth/pending-verification']);
+        })
+        .catch((error) => {
+          this.errorMessage = error.message || 'An error occurred during sign up';
+          this.isLoading = false;
+        });
     }
   }
 
