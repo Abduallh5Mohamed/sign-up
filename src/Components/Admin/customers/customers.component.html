@@ -1,0 +1,59 @@
+<section class="customers-section">
+  <h2 class="section-title">OUR VALUED CUSTOMERS</h2>
+  <p class="section-subtitle">We're proud to serve these amazing individuals</p>
+
+  <div class="container-fluid">
+    <div class="row g-4">
+      <div class="col-xl-3 col-lg-4 col-md-6 col-12" *ngFor="let customer of customers">
+        <div class="card">
+
+          <!-- Contact buttons in top right -->
+          <div class="contact-buttons">
+            <button class="contact-btn phone-btn" (click)="callCustomer(customer)" title="Contact">
+              <i class="fas fa-user"></i>
+            </button>
+            <button class="contact-btn email-btn" (click)="emailCustomer(customer)" title="Orders">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+          </div>
+
+          <!-- Remove button (icon only) -->
+          <button class="remove-btn-icon" (click)="removeCustomer(customer)" title="Remove Customer">
+            <i class="fas fa-times"></i>
+          </button>
+
+          <!-- Profile image -->
+          <img [src]="customer.image" class="profile-img" [alt]="customer.name">
+
+          <!-- Name -->
+          <h5 class="customer-name">{{ customer.name }}</h5>
+
+          <!-- Customer info with icons -->
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fas fa-crown contact-icon"></i>
+              <span class="contact-text">{{ customer.membershipType }}</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-dollar-sign contact-icon"></i>
+              <span class="contact-text">{{ customer.totalSpent }}</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-shopping-bag contact-icon"></i>
+              <span class="contact-text">{{ customer.totalOrders }} Orders</span>
+            </div>
+          </div>
+
+          <!-- Join date -->
+          <div class="join-date">Member Since: {{ customer.joined }}</div>
+
+          <!-- Action buttons -->
+          <div class="action-footer">
+            <button class="profile-btn" (click)="viewCustomerProfile(customer)">PROFILE</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
