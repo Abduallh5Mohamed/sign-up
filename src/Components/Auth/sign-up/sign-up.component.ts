@@ -27,10 +27,10 @@ export class SignUpComponent {
       confirmPassword: ['', Validators.required],
       displayName: ['', Validators.required],
       acceptTerms: [false, Validators.requiredTrue]
-    }, { validators: this.passwordMatchValidator });
+    }, { validators: SignUpComponent.passwordMatchValidator });
   }
 
-  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  static passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
     
