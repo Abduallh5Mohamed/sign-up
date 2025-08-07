@@ -103,13 +103,14 @@
           <input
             type="checkbox"
             formControlName="acceptTerms"
-            [class.error]="signUpForm.get('acceptTerms')?.invalid && signUpForm.get('acceptTerms')?.touched"
           />
           <span class="checkmark"></span>
-          I agree to the <a href="#" class="link">Terms & Conditions</a> and <a href="#" class="link">Privacy Policy</a>
+          <span class="checkbox-text">
+            I agree to the <a href="#" class="link">Terms & Conditions</a> and <a href="#" class="link">Privacy Policy</a>
+          </span>
         </label>
-        <div class="error-message" *ngIf="signUpForm.get('acceptTerms')?.invalid && signUpForm.get('acceptTerms')?.touched">
-          You must accept the terms and conditions
+        <div class="error-message" *ngIf="getFieldError('acceptTerms')">
+          {{ getFieldError('acceptTerms') }}
         </div>
       </div>
 

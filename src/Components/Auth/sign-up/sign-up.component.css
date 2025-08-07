@@ -159,13 +159,14 @@
 }
 
 .checkmark {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   position: relative;
   flex-shrink: 0;
   transition: all 0.3s ease;
+  margin-right: 8px;
 }
 
 .checkbox-label input[type="checkbox"]:checked + .checkmark {
@@ -180,8 +181,25 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
+}
+
+.checkbox-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.link {
+  color: #ff3b3b;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #ff5555;
+  text-decoration: underline;
 }
 
 .error-message {
